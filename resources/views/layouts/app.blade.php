@@ -21,7 +21,7 @@
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
         @include('layouts.navigation')
         <main class="m2 p-8 w-full">
-
+            {{ $slot }}
         </main>
     </div>
     @livewire('notifications')
