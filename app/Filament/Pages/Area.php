@@ -30,10 +30,12 @@ class Area extends Page
                     ->description('Registra area de la institucion')
                     ->schema([
                         Forms\Components\TextInput::make('name')
+                            ->label('Nombre')
                             ->label('Name')
                             ->rules('required')
                             ->rules('required'),
                         Forms\Components\TextInput::make('code')
+                            ->label('Codigo')
                             ->label('Codigo de Area')
                             ->default('COD-' . random_int(100000, 999999))
                             ->disabled()

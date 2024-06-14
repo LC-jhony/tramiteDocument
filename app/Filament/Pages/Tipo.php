@@ -37,6 +37,7 @@ class Tipo extends Page implements HasTable
                     ->description('registre eltipo de documento para el tramite')
                     ->schema([
                         Forms\Components\TextInput::make('name')
+                            ->label('Nombre')
                             ->required()
                             ->rule('string')
                     ])
@@ -67,10 +68,12 @@ class Tipo extends Page implements HasTable
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Fecha')
+                    ->label('Fecha')
                     ->dateTime()
                     ->sortable(),
                 // ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Actualizado')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
