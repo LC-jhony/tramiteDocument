@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Type;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Document extends Model
 {
@@ -22,9 +24,24 @@ class Document extends Model
         'email',
         'addres',
         'code',
-        'ate',
+        'date',
         'folio',
         'asunto',
         'file',
     ];
+
+    public function area(): BelongsTo
+    {
+        return $this->belongsTo(
+            related: Area::class,
+            foreignKey: 'area_id',
+        );
+    }
+    public function type(): BelongsTo
+    {
+        return $this->belongsTo(
+            related: Type::class,
+            foreignKey: 'type_id'
+        );
+    }
 }
