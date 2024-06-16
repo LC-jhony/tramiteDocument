@@ -4,9 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Document;
 use App\Models\Type;
-use DateTime;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
@@ -19,6 +17,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Livewire\Component;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Wallo\FilamentSelectify\Components\ToggleButton;
 
 class DocumentForm extends Component implements HasForms
@@ -129,7 +128,7 @@ class DocumentForm extends Component implements HasForms
                                                         ->default(now()->format('Y-m-d'))
                                                         ->disabled()
                                                         ->dehydrated()
-                                                        ->required()
+                                                        ->required(),
                                                 ])->columns(2),
                                         ]),
                                     Section::make('')
@@ -138,7 +137,7 @@ class DocumentForm extends Component implements HasForms
                                                 ->schema([
                                                     TextInput::make('folio')
                                                         ->label('Folio')
-                                                        ->hint('Forgotten your password? Bad luck.')
+                                                        //->hint('Forgotten your password? Bad luck.')
                                                         ->required()
                                                         ->numeric(),
                                                     Select::make('area_id')
@@ -155,8 +154,12 @@ class DocumentForm extends Component implements HasForms
                                                 ])->columns(2),
                                             FileUpload::make('file')
                                                 ->label('Adjunte su documento')
+                                                ->directory('documents')
                                                 ->helperText(str('El archivo  **de tramite** debe de subirlo para realizar el tramite.')->inlineMarkdown()->toHtmlString())
-                                                ->preserveFilenames()
+                                                ->getUploadedFileNameForStorageUsing(
+                                                    fn (TemporaryUploadedFile $file): string => (string) str($file->getClientOriginalName())
+                                                        ->prepend('tramite-'),
+                                                )
                                                 ->acceptedFileTypes(['application/pdf'])
                                                 ->required(),
                                         ]),

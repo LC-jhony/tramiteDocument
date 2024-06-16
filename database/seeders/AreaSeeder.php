@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class AreaSeeder extends Seeder
 {
@@ -12,6 +12,12 @@ class AreaSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        DB::table('areas')->insert([
+            [
+                'id' => '1',
+                'name' => 'Mesa de partes',
+                'code' => 'COD-796370',
+            ],
+        ]);
     }
 }
