@@ -7,19 +7,29 @@ use App\Models\Area;
 use App\Models\Document;
 use App\Models\Movement;
 use App\Models\User;
+use Filament\Actions\StaticAction;
+
 use Filament\Forms;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\ViewField;
+use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Support\Enums\MaxWidth;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
+
 use Filament\Tables\Table;
+use function Laravel\Prompts\form;
+
+use Illuminate\Support\HtmlString;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class Documento extends Page implements HasTable
 {
@@ -44,6 +54,10 @@ class Documento extends Page implements HasTable
                 TextColumn::make('ruc')
                     ->label('RUC')
                     ->placeholder('N/A'),
+                TextColumn::make('area.name')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('movement.status'),
                 TextColumn::make('date')
                     ->since(),
                 // TextColumn::make('file')
@@ -54,45 +68,18 @@ class Documento extends Page implements HasTable
             ->actions([
                 CreateAction::make('create')
                     ->label('Derivar')
-                    ->color('success')
                     ->model(Movement::class)
                     ->fillForm(fn (Document $record): array => [
                         'document_id' => $record->id,
-                        'area_origen_id' => $record->id,
-                        'pdf' => $record->file,
-                        'description' => $record->asunto
+                        'area_origen_id' => $record->area_id,
+                        // 'pdf' => $record->file,
+                        'description' => $record->asunto,
+                        'date_movement' => date(now())
                     ])
                     ->form([
 
-                        Section::make('Documento')
-                            ->description('Informacion del documento')
+                        Fieldset::make('')
                             ->schema([
-
-                                Forms\Components\Select::make('document_id')
-                                    ->label('Documento')
-                                    ->options(Document::all()->pluck('code', 'id')->toArray())
-                                    ->disabled()
-                                    ->dehydrated()
-                                    ->required(),
-                                Forms\Components\Select::make('area_origen_id')
-                                    ->label('Area origen ')
-                                    ->options(Area::all()->pluck('name', 'id')->toArray())
-                                    ->disabled()
-                                    ->dehydrated()
-                                    ->required(),
-
-                                Forms\Components\Select::make('status')
-                                    ->label('Estado')
-                                    ->options(MovementStatus::class)
-                                    ->required()
-                                    ->native(false),
-                                Forms\Components\DatePicker::make('date_movement')
-                                    ->label('Fecha de Movimiento')
-                                    ->default(now())
-                                    // ->disabled()
-                                    // ->dehydrated()
-                                    ->required(),
-
                                 Forms\Components\Textarea::make('description')
                                     ->label('Descripción')
                                     ->disabled()
@@ -100,22 +87,42 @@ class Documento extends Page implements HasTable
                                     ->required()
                                     ->columnSpan(5),
 
-                            ])->columns(4),
+                            ]),
                         Card::make()
                             ->schema([
                                 Fieldset::make('')
                                     ->schema([
+
+                                        Forms\Components\Select::make('status')
+                                            ->label('Estado')
+                                            ->placeholder('Estado')
+                                            ->options(MovementStatus::class)
+                                            ->required()
+                                            ->native(false),
+                                        DatePicker::make('date_movement')
+                                            ->label('Fecha de Movimiento')
+                                            ->default(now())
+                                            ->disabled()
+                                            ->dehydrated()
+                                            ->required(),
+                                        Forms\Components\Select::make('document_id')
+                                            ->label('Tramite codigo')
+                                            ->options(Document::all()->pluck('code', 'id')->toArray())
+                                            ->disabled()
+                                            ->dehydrated()
+                                            ->required(),
+                                        Forms\Components\Select::make('area_origen_id')
+                                            ->label('Area origen ')
+                                            ->options(Area::all()->pluck('name', 'id')->toArray())
+                                            ->disabled()
+                                            ->dehydrated()
+                                            ->required(),
                                         Forms\Components\Select::make('destination_area_id')
                                             ->label('Destino')
+                                            ->helperText(new HtmlString('seleccione <strong>Area | Oficina </strong>para derivar documento.'))
                                             ->options(Area::all()->pluck('name', 'id'))
-                                            ->native(false)
-                                            ->columnSpan(2),
-
-                                        Forms\Components\Select::make('user_id')
-                                            ->label('Usuario')
-                                            ->options(User::all()->pluck('name', 'id'))
-                                            ->native(false)
                                             ->required()
+                                            ->native(false)
                                             ->columnSpan(2),
                                         Forms\Components\FileUpload::make('mov_file')
                                             ->label('Archivo')
@@ -126,17 +133,21 @@ class Documento extends Page implements HasTable
                                             ->columnSpan(2),
                                     ])->columnSpan(2),
                                 ViewField::make('pdf')
-                                    ->columnSpan(2)
+                                    ->columnSpan(3)
                                     // ->hiddenLabel()
                                     ->view('forms.components.pdf-view')
-
-                                    ->live()
-                                    ->columnSpan(3),
-                                // Fieldset::make('')
-                                //     ->schema([])
                             ])->columns(5),
-
-                    ])
+                    ])->modalWidth(MaxWidth::SevenExtraLarge)
+                    ->modalHeading('Derivar documento')
+                    ->modalDescription('formaulario para derivar y/o rechazar tramite')
+                    ->createAnother(false)
+                    ->successRedirectUrl(route('filament.admin.pages.documento'))
+                    ->successNotification(
+                        Notification::make()
+                            ->success()
+                            ->title('Tramite')
+                            ->body('documento aceptado'),
+                    )
                     ->modalWidth(MaxWidth::SevenExtraLarge),
             ])
             ->bulkActions([

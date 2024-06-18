@@ -19,11 +19,11 @@ return new class extends Migration
             $table->dateTime('date_movement');
             $table->text('description');
             $table->enum('status', ['Aceptado', 'Proceso', 'Rechazado', 'finalizado']);
-            $table->unsignedBigInteger('user_id');
+            //$table->unsignedBigInteger('user_id');
             $table->string('mov_file')->nullable();
             $table->text('mov_description_origen');
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
             $table->foreign('area_origen_id')->references('id')->on('areas')->onDelete('cascade');
             $table->foreign('destination_area_id')->references('id')->on('areas')->onDelete('cascade');

@@ -44,4 +44,11 @@ class Document extends Model
             foreignKey: 'type_id'
         );
     }
+    public function movement(): BelongsTo
+    {
+        return $this->belongsTo(
+            related: Movement::class,
+            foreignKey: 'document_id'
+        );
+    }
 }

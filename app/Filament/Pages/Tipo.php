@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
@@ -88,9 +89,13 @@ class Tipo extends Page implements HasTable
                         Forms\Components\TextInput::make('name')
 
                     ]),
-                DeleteAction::make('delete')
-                    ->label('Eliminar')
-                    ->requiresConfirmation(),
+                Action::make('delete')
+                    ->action(fn (Type $record) => $record->delete())
+                    ->color('warning')
+                    ->requiresConfirmation()
+                    ->modalHeading('Delete post')
+                    ->modalDescription('Are you sure you\'d like to delete this post? This cannot be undone.')
+                    ->modalSubmitActionLabel('Yes, delete it')
             ])
             ->bulkActions([
                 // ...
