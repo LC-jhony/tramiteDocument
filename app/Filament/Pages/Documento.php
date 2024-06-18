@@ -57,7 +57,15 @@ class Documento extends Page implements HasTable
                 TextColumn::make('area.name')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('movement.status'),
+                TextColumn::make('movement.status')
+                    ->label('Estado')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'Aceptado' => 'success',
+                        'Proceso' => 'gray',
+                        'Rechazado' => 'warning',
+                        'Finalizado' => 'danger',
+                    }),
                 TextColumn::make('date')
                     ->since(),
                 // TextColumn::make('file')
