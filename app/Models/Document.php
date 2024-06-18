@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\Movement;
+use App\Models\Type;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Document extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         'type_id',
         'area_id',
@@ -37,7 +39,6 @@ class Document extends Model
             foreignKey: 'area_id',
         );
     }
-
     public function type(): BelongsTo
     {
         return $this->belongsTo(
@@ -45,7 +46,6 @@ class Document extends Model
             foreignKey: 'type_id'
         );
     }
-
     public function movement(): HasMany
     {
         return $this->hasMany(
