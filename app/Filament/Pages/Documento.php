@@ -6,30 +6,22 @@ use App\Enum\MovementStatus;
 use App\Models\Area;
 use App\Models\Document;
 use App\Models\Movement;
-use App\Models\User;
-use Filament\Actions\StaticAction;
-
 use Filament\Forms;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\ViewField;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Support\Enums\MaxWidth;
-use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
-
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use function Laravel\Prompts\form;
-
 use Illuminate\Support\HtmlString;
-use Symfony\Contracts\Service\Attribute\Required;
 
 class Documento extends Page implements HasTable
 {
@@ -47,14 +39,19 @@ class Documento extends Page implements HasTable
             ->query(Document::query())
             ->columns([
                 TextColumn::make('code')
-                    ->label('Codigo'),
+                    ->label('Codigo')
+                    ->searchable(),
                 TextColumn::make('dni')
+
                     ->label('DNI')
+                    ->searchable()
                     ->placeholder('N/A'),
                 TextColumn::make('ruc')
                     ->label('RUC')
+                    ->searchable()
                     ->placeholder('N/A'),
                 TextColumn::make('area.name')
+                    ->label('Area')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('movement.status')
@@ -67,11 +64,13 @@ class Documento extends Page implements HasTable
                         'Finalizado' => 'danger',
                     }),
                 TextColumn::make('date')
-                    ->since(),
+                    ->label('Fecha'),
                 // TextColumn::make('file')
             ])
             ->filters([
-                // ...
+                SelectFilter::make('movement.status')
+                    ->options(MovementStatus::class)
+                    ->native(false),
             ])
             ->actions([
                 CreateAction::make('create')
@@ -82,7 +81,7 @@ class Documento extends Page implements HasTable
                         'area_origen_id' => $record->area_id,
                         // 'pdf' => $record->file,
                         'description' => $record->asunto,
-                        'date_movement' => date(now())
+                        'date_movement' => date(now()),
                     ])
                     ->form([
 
@@ -143,7 +142,7 @@ class Documento extends Page implements HasTable
                                 ViewField::make('pdf')
                                     ->columnSpan(3)
                                     // ->hiddenLabel()
-                                    ->view('forms.components.pdf-view')
+                                    ->view('forms.components.pdf-view'),
                             ])->columns(5),
                     ])->modalWidth(MaxWidth::SevenExtraLarge)
                     ->modalHeading('Derivar documento')
@@ -159,7 +158,7 @@ class Documento extends Page implements HasTable
                     ->modalWidth(MaxWidth::SevenExtraLarge),
             ])
             ->bulkActions([
-                // ...
+                DeleteBulkAction::make('Eliminar'),
             ]);
     }
 }
