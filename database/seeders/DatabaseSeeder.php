@@ -22,11 +22,11 @@ class DatabaseSeeder extends Seeder
             TypeSeeder::class,
             AreaSeeder::class
         ]);
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => Hash::make('password'),
-            'area_id' => '1',
-        ]);
+        // User::factory()->create([
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        //     'password' => Hash::make('password'),
+        //     'area_id' => '1',
+        // ]);
     }
 }

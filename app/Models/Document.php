@@ -49,8 +49,8 @@ class Document extends Model
     public function movement(): HasMany
     {
         return $this->hasMany(
-            related: Movement::class,
-            foreignKey: 'document_id'
+            Movement::class
+
         );
     }
 }

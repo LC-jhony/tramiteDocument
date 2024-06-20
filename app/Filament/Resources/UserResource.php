@@ -57,6 +57,9 @@ class UserResource extends Resource
                             ->options(Area::query()->pluck('name', 'id'))
                             ->required()
                             ->native(false),
+                        Forms\Components\CheckboxList::make('roles')
+                            ->relationship('roles', 'name')
+                            ->searchable()
                     ])->columns(3)
             ]);
     }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Area;
 use App\Models\Document;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,8 +25,17 @@ class Movement extends Model
     public function document(): BelongsTo
     {
         return $this->belongsTo(
-            related: Document::class,
-            foreignKey: 'document_id'
+            Document::class
+
         );
+    }
+    public function areaOrigen(): BelongsTo
+    {
+        return $this->belongsTo(Area::class, 'area_origen_id');
+    }
+
+    public function destinationArea(): BelongsTo
+    {
+        return $this->belongsTo(Area::class, 'destination_area_id');
     }
 }
