@@ -16,14 +16,14 @@ class Expediente extends Page implements HasTable
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
     protected static string $view = 'filament.pages.expediente';
-    public function table(Table $table): Table
-    {
-        return $table
-            ->query(Document::whereHas('movement', function ($query) {
-                $query->where('destination_area_id', Auth::user()->area_id);
-            }))
-            ->columns([
-                TextColumn::make('asunto')
-            ]);
-    }
+    // public function table(Table $table): Table
+    // {
+    //     return $table
+    //         ->query(Document::whereHas('movement', function ($query) {
+    //             $query->where('destination_area_id', Auth::user()->area_id);
+    //         }))
+    //         ->columns([
+    //             TextColumn::make('asunto')
+    //         ]);
+    // }
 }
