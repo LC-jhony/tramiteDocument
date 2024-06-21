@@ -54,7 +54,7 @@ class Documento extends Page implements HasTable
                     ->label('Area')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('movement.status')
+                TextColumn::make('latestMovement.status')
                     ->label('Estado')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {

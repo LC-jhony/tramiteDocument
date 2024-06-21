@@ -23,7 +23,7 @@ class AreaPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
-            //->brandName(fn () => auth()->user()->name ?? null)
+            ->brandName(fn () => auth()->user()->name ?? null)
             ->id('area')
             ->path('area')
             ->login()
