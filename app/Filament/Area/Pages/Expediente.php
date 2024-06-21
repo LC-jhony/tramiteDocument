@@ -47,7 +47,7 @@ class Expediente extends Page  implements HasTable
                 TextColumn::make('movement.mov_description_origen')
                     ->label('descripcion origen')
                     ->getStateUsing(fn ($record) => optional($record->movement->last())->mov_description_origen),
-                TextColumn::make('movement.status')
+                TextColumn::make('latestMovement.status')
                     ->label('Estado')->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'Aceptado' => 'success',
