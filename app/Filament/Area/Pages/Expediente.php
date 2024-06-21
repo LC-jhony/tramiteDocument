@@ -53,8 +53,8 @@ class Expediente extends Page  implements HasTable
                     ->color(fn (string $state): string => match ($state) {
                         'Aceptado' => 'success',
                         'Proceso' => 'gray',
-                        'Rechazado' => 'warning',
-                        'Finalizado' => 'danger',
+                        'Rechazado' => 'danger',
+                        'finalizado' => 'warning',
                     })
             ])
             ->filters([

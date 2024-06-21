@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('destination_area_id');
             $table->dateTime('date_movement');
             $table->text('description');
-            $table->enum('status', ['Aceptado', 'Proceso', 'Rechazado', 'finalizado']);
+            $table->enum('status', ['Aceptado', 'Proceso', 'Rechazado', 'Finalizado']);
             //$table->unsignedBigInteger('user_id');
             $table->string('mov_file')->nullable();
             $table->text('mov_description_origen');
