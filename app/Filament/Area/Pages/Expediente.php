@@ -15,6 +15,7 @@ use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\ViewField;
+use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
@@ -138,6 +139,16 @@ class Expediente extends Page  implements HasTable
                                     ->view('forms.components.pdf-view'),
                             ])->columns(5),
                     ])->modalWidth(MaxWidth::SevenExtraLarge)
+                    ->modalHeading('Derivar documento')
+                    ->modalDescription('formaulario para derivar y/o rechazar tramite')
+                    ->createAnother(false)
+                    ->successRedirectUrl(route('filament.admin.pages.documento'))
+                    ->successNotification(
+                        Notification::make()
+                            ->success()
+                            ->title('Tramite')
+                            ->body('documento aceptado'),
+                    )
             ])
             ->bulkActions([
                 // ...

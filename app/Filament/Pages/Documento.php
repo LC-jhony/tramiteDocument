@@ -144,7 +144,7 @@ class Documento extends Page implements HasTable
                                     // ->hiddenLabel()
                                     ->view('forms.components.pdf-view'),
                             ])->columns(5),
-                    ])->modalWidth(MaxWidth::SevenExtraLarge)
+                    ])
                     ->modalHeading('Derivar documento')
                     ->modalDescription('formaulario para derivar y/o rechazar tramite')
                     ->createAnother(false)
