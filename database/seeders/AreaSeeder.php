@@ -15,7 +15,7 @@ class AreaSeeder extends Seeder
         DB::table('areas')->insert([
             [
                 'id' => '1',
-                'name' => 'Mesa de partes',
+                'name' => 'Informatica',
                 'code' => 'COD-796370',
             ],
         ]);
